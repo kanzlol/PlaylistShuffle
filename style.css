@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css?family=Mukta');
+
+#howTo, #title, #next, h1, h2, h3, h4, h5 {
+	font-family: 'Mukta', sans-serif;
+}
+
+ul, li {
+    list-style: none;
+}
+
+hr {
+	width: 70%;
+    border: 0;
+    height: 1px;
+    background: #337ab7;
+    background-image: linear-gradient(to left, #ccc, #337ab7, #ccc);
+}
+
+.small {
+    height: 20px;
+    overflow:hidden;
+}
+.big {
+    height: auto;
+}
+
+#playlist {
+	display:none;
+	height:400px;
+	width:600px;
+	overflow-y:scroll;
+}
+
+#next {
+	font-size: 32px;
+}
+
+#howTo {
+	text-align: center;
+	padding-right:15%;
+	font-size: 22px;
+}
+
+#remaining {
+	display: inline-block;
+}
