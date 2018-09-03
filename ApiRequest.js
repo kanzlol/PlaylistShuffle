@@ -120,7 +120,7 @@
     function displayTitle() {
         var b = nextTitle(vidTitle);
         document.title = b;
-        $('#titles').html('<h2>' + b + '</h2><h3>Next: ' + nextOfNext(vidTitle) + '</h3><br>');
+        $('#titles').html('<h2>' + b + '</h2><h3>Next: ' + nextOfNext(vidTitle) + '</h3>');
         $('#remaining').html('(remaining: ' + (abc.length - 1) + ')');
     }
 
@@ -136,7 +136,7 @@
     function previousSong() {
         var prevT = prevTitle(vidTitle);
         document.title = prevT;
-        $('#titles').html('<h2>' + prevT + '</h2><h3>Next: ' + prevOfNext(vidTitle) + '</h3><br>');
+        $('#titles').html('<h2>' + prevT + '</h2><h3>Next: ' + prevOfNext(vidTitle) + '</h3>');
         $('#remaining').html('(remaining: ' + vidTitle.length + ')');
 
         var prev = prevItem(vidIds);
@@ -164,8 +164,8 @@
      function onPlayerReady() {
         document.title = vidTitle[0];
         $('#remaining').html('(remaining: ' + vidTitle.length + ')');
-        $('#titles').html('<h2>' + vidTitle[0] + '</h2><h3>Next: ' + nextOfNext(vidTitle) + '</h3><br>');
-        $('#results').after('<br><hr><br>');
+        $('#titles').html('<h2>' + vidTitle[0] + '</h2><h3>Next: ' + nextOfNext(vidTitle) + '</h3>');
+        $('#results').after('<br><hr class="underline"><br>');
         player.loadVideoById(vidIds[0]);
     }
 

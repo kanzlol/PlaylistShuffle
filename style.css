@@ -24,6 +24,11 @@ hr {
     height: auto;
 }
 
+.underline {
+	margin-left: 10px;
+	width: 80%;
+}
+
 #playlist {
 	display:none;
 	height:400px;
