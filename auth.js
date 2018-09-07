@@ -1,13 +1,13 @@
 
 
-
+		//authentication
 	function onGoogleLoad() {
 	    gapi.client.setApiKey('AIzaSyB3Sim7dGZnujr7gkJ64UR6VZLFeyx1YSg');
 	    gapi.client.load('youtube', 'v3', function() {
 	        //stuff
 	    });
 	}
-
+		//loads iframe api on load
 	function loadScript() {
 	    if (typeof(YT) == 'undefined' || typeof(YT.Player) == 'undefined') {
 	        var tag = document.createElement('script');

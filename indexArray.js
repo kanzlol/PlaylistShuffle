@@ -1,8 +1,9 @@
     var i = 0;
     var j = 0;
-    var l = 0;
     var x = 0;
 
+
+        //iterating through arrays
     function nextItem(array) {
         i = i + 1;
         i = i % array.length;
@@ -36,21 +37,22 @@
     }
 
     function nextOfNext(array) {
-        l = l + 1;
-        l = l % array.length;
+        x = x + 1;
+        x = x % array.length;
 
-        return array[l];
+        return array[x];
     }
 
     function prevOfNext(array) {
-        if (l === 1) {
-            l = 2;
+        if (x === 1) {
+            x = 2;
         }
 
-        l = l - 1;
-        return array[l];
+        x = x - 1;
+        return array[x];
     }
 
+        //shuffling arrays -> generating new, randomized, arrays
     function shuffle(obj1, obj2) {
         var index = obj1.length;
         var rnd, tmp1, tmp2;
