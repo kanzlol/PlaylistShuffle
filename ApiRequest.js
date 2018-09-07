@@ -126,7 +126,7 @@
         var b = nextTitle(vidTitle);
         document.title = b;
         $('#titles').html('<h2>' + b + '</h2><h3>Next: ' + nextOfNext(vidTitle) + '</h3>');
-        $('#remaining').html('(remaining: ' + vidTitle[i].length + ')');
+        $('#remaining').html('(remaining: ' + vidTitle + ')');
     }
 
     //plays next video on click function
