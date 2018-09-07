@@ -1,10 +1,8 @@
+    var i = 0;
+    var j = 0;
+    var l = 0;
+    var x = 0;
 
-
-function something(array) {
-    a = a - 1;
-
-    return array[a];
-}
     function nextItem(array) {
         i = i + 1;
         i = i % array.length;

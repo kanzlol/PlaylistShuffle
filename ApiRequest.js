@@ -1,11 +1,8 @@
 
 
 
-    var playlistId, nextPageToken, prevPageToken, player, showPlaylist, abc;
-    var i = 0;
-    var j = 0;
-    var l = 0;
-    var a = 0;
+    var playlistId, nextPageToken, prevPageToken, player, showPlaylist, abc, num, playlistVar;
+    var loopOnClick = 1;
     var vidIds = [];
     var vidTitle = [];
 
@@ -80,10 +77,7 @@
                     if(!$('script').attr('src=iframe_api')) {
                         loadScript();
                         $('#next-button').show();
-                        a = vidTitle;
                         shuffle(vidIds, vidTitle);
-                        abc = Object.assign({}, vidIds, vidTitle);
-                        console.log(abc);
                         displayPlaylist(vidTitle)
 
                         return;
@@ -121,7 +115,7 @@
         var b = nextTitle(vidTitle);
         document.title = b;
         $('#titles').html('<h2>' + b + '</h2><h3>Next: ' + nextOfNext(vidTitle) + '</h3>');
-        $('#remaining').html('(remaining: ' + (abc.length - 1) + ')');
+        $('#remaining').html('(remaining: ' +  + ')');
     }
 
     function nextSong() {
@@ -147,16 +141,24 @@
         }
     }
 
-    function videoEnd(event) {
+    function loopSong() {
+        var current = vidIds[i];
+        if(document.getElementById('loop').checked) {
+            // playlistVar = vidIds[0];
+            // loopOnClick = 1;
+            console.log(current)
+    
+
+        }
+
+    }
+
+    function onChange(event) {
+            loopSong(); 
         if(event.data === 0) {
-        var current = something(vidIds);
-            if(document.getElementById('loop').checked) {
-                player.cueVideoById(current);
-            }
-        console.log(current)
-            // $('#prev-button').show();
-            // displayTitle();
-            // play();
+            $('#prev-button').show();
+            displayTitle();
+            play();
 
         }
     }
@@ -167,13 +169,14 @@
         $('#titles').html('<h2>' + vidTitle[0] + '</h2><h3>Next: ' + nextOfNext(vidTitle) + '</h3>');
         $('#results').after('<br><hr class="underline"><br>');
         player.loadVideoById(vidIds[0]);
+        
     }
 
     function play(id) {
         var next = nextItem(vidIds);
         player.loadVideoById(next);
     }
-
+        
     function onYouTubeIframeAPIReady() {
         $('#loading').remove(); 
         $('#functionality').show();
@@ -182,11 +185,16 @@
             height: '360',
             playerVars: { 
                 'autoplay': 0,
-                'controls': 1
+                'controls': 1,
+                'showinfo': 0,
+                'cc_load_policy': 0,
+                'iv_load_policy': 3,
+                'loop': loopOnClick,
+                'playlist': playlistVar
             },
             events: { 
                 'onReady': onPlayerReady,
-                'onStateChange': videoEnd
+                'onStateChange': onChange
             }
         });
     }
@@ -205,7 +213,7 @@
             return match[1];
         }
         else {
-            console.log("hej");
+            alert("Insert a Playlist");
         }
 
     }
