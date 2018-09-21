@@ -1,9 +1,29 @@
 
 
     //variables
-    var playlistId, nextPageToken, prevPageToken, player, showPlaylist;
+    var playlistId, nextPageToken, prevPageToken, player, showPlaylist, prevPress;
     var vidIds = [];
     var vidTitle = [];
+    var vidDesc = [];
+
+    $(".show-more a").click(function(e) {
+        e.preventDefault();
+        var linkText = $(this).text().toUpperCase();
+
+        if(linkText === "SHOW MORE") {
+            linkText = "Show less";
+            $(".desc").switchClass("hideDesc", "showDesc", 400);
+        }
+        else {
+            linkText = "Show more";
+            $(".desc").switchClass("showDesc", "hideDesc", 400);
+        }   
+        $(this).text(linkText);
+    });
+
+    $('#playlist').click( function(event) {
+      event.preventDefault();
+    });
 
     //runs on submit
     $(function() {
@@ -63,6 +83,7 @@
                 //pushing title responses into array
                 $.each(playlistItems, function(index, item) {
                     vidTitle.push(item.snippet.title);
+                    vidDesc.push(item.snippet.description);
                 });
             } 
             else {
@@ -84,8 +105,11 @@
                     if(!$('script').attr('src=iframe_api')) {
                         loadScript();
                         $('#next-button').show();
-                        shuffle(vidIds, vidTitle);
+                        console.log(vidIds)
+                        shuffle(vidIds, vidTitle, vidDesc);
                         displayPlaylist(vidTitle)
+                        prevNextListener(vidIds);
+                        
 
                         return;
                     }
@@ -113,12 +137,54 @@
 
     //displaying playlist below youtube player
     function displayPlaylist(vidTitle) {
-        $('#playlist').append('<ul><li><a href="#">' + vidTitle[0] + '</a></li></ul>').show();
+        var count = 1;
+        var anchorId = 0;
+        $('#playlist').append('<h3>Current randomized Playlist:</h3><br><ul><li>' + 1 + ' - <a href="#" onClick="getPlaylistId();">' + vidTitle[i] + '</a></li></ul>').show();
 
         $.each(vidTitle, function(index) {
         var showPlaylist = nextItem(vidTitle);
-            $('#playlist').append('<ul><li><a href="#">' + showPlaylist + '</a></li></ul>').show();
+            //adding an id to the href anchors
+            $('#playlist').append('<ul><li>' + (count += 1) + ' - <a href="#'+ (anchorId += 1) +'" onClick="getPlaylistId();">' + showPlaylist + '</a></li></ul>').show();
         });
+    }
+
+    function reRandomize() {
+        shuffle(vidIds, vidTitle, vidDesc);
+        var rndVidIds = vidIds;
+
+        $('#playlist').empty();
+        $('#prev-button').hide();
+        $('#remaining').html('(remaining: ' + vidTitle.length + ')');
+        $('#titles').html('<h2>' + vidTitle[0] + '</h2>');
+        $('.desc').html('<br>' + vidDesc[0]);
+
+        displayPlaylist(vidTitle);
+        player.loadVideoById(vidIds[0]);
+    }
+
+    //getting index of the playlist li
+    function getPlaylistId() {
+        var g = document.getElementById('playlist');
+
+        for (var i = 0, len = g.children.length; i < len; i++) {
+            (function(index){
+                g.children[i].onclick = function(){
+                    var aId = $('a', this).attr("href");
+
+                    player.loadVideoById(vidIds[index-2]);
+                    document.title = vidTitle[index-2];
+                    $('#titles').html('<h2>' + vidTitle[index-2] + '</h2><h3>Next: ' + vidTitle[index-1] + '</h3>');
+
+                    //looking for the anchor id's and creating a scroll function
+                    function scrollToAnchor(aId){
+                        var aTag = $("a[href="+ aId +"]");
+                        $('#playlist').animate({scrollTop: aTag.position().top + $(window).height},'slow');
+                    }
+                    scrollToAnchor(aId);
+                }    
+            })(i);
+
+        }  
     }
 
     //displaying current video title and next video title
@@ -126,13 +192,19 @@
         var b = nextTitle(vidTitle);
         document.title = b;
         $('#titles').html('<h2>' + b + '</h2><h3>Next: ' + nextOfNext(vidTitle) + '</h3>');
-        $('#remaining').html('(remaining: ' + vidTitle + ')');
+        $('#remaining').html('(remaining: ' + (vidTitle.length -= 1) + ')');
+    }
+
+    //displaying video description
+    function displayDesc() {
+        $('.desc').html('<br>' + vidDesc[i+1]);
     }
 
     //plays next video on click function
     function nextSong() {
         $('#prev-button').show();
         displayTitle();
+        displayDesc();
 
         //loads next item in array
         var next = nextItem(vidIds);
@@ -144,7 +216,8 @@
         var prevT = prevTitle(vidTitle);
         document.title = prevT;
         $('#titles').html('<h2>' + prevT + '</h2><h3>Next: ' + prevOfNext(vidTitle) + '</h3>');
-        $('#remaining').html('(remaining: ' + vidTitle.length + ')');
+        $('#remaining').html('(remaining: ' + (vidTitle.length += 1) + ')');
+        $('.desc').html('<br>' + vidDesc[i-1]);
 
         //loads previous item in array
         var prev = prevItem(vidIds);
@@ -154,6 +227,27 @@
         if(prev === vidIds[0]) {
             $('#prev-button').hide();
         }
+    }
+
+    //listens to p and n keypresses to change songs.
+    var prevNextListener = function(string) {
+        var prev = prevItem(string);
+        document.addEventListener("keypress", function onEvent(event) {
+            console.log(event)
+            if(event.key === "n") {
+                $(this).off('keypress', prevNextListener);
+                nextSong();
+            }
+        });
+        document.addEventListener("keypress", function onEvent(event) {
+            if(event.key === "p") {
+                if(prev !== string[i]) {
+                    $(this).off('keypress', prevNextListener);
+                    previousSong();
+                }
+            }
+        });
+
     }
 
     //listening to when the state is changing on the player
@@ -169,6 +263,7 @@
             else {
                 $('#prev-button').show();
                 displayTitle();
+                displayDesc();
                 play();
             }
 
@@ -177,11 +272,14 @@
 
     //loads after the player is ready
      function onPlayerReady() {
-        document.title = vidTitle[0];
+        getPlaylistId();
+        document.title = vidTitle[i];
         $('#remaining').html('(remaining: ' + vidTitle.length + ')');
-        $('#titles').html('<h2>' + vidTitle[0] + '</h2><h3>Next: ' + nextOfNext(vidTitle) + '</h3>');
-        $('#results').after('<br><hr class="underline"><br>');
-        player.loadVideoById(vidIds[0]);
+        $('#titles').html('<h2>' + vidTitle[i] + '</h2><h3>Next: ' + nextOfNext(vidTitle) + '</h3>');
+        $('.desc').html('<br>' + vidDesc[i]);
+        $('.show-more').show();
+        $('.text-container').after('<hr class="underlineL">');
+        player.loadVideoById(vidIds[i]);
         
     }
 
@@ -197,8 +295,8 @@
         $('#functionality').show();
         //variables for youtube iframe
         player = new YT.Player( 'results', {
-            width: '640',
-            height: '360',
+            width: '800',
+            height: '450',
             playerVars: { 
                 'autoplay': 0,
                 'controls': 1,
