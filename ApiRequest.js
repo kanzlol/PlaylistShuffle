@@ -148,7 +148,7 @@
 
     function reRandomize() {
         shuffle(vidIds, vidTitle, vidDesc);
-        var rndVidIds = vidIds;
+        // var rndVidIds = vidIds;
 
         $('#playlist').empty();
         $('#prev-button').hide();
