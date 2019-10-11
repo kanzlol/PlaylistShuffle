@@ -17,7 +17,7 @@
         else {
             linkText = "Show more";
             $(".desc").switchClass("showDesc", "hideDesc", 400);
-        }   
+        }
         $(this).text(linkText);
     });
 
@@ -45,18 +45,17 @@
                     //displaying the load of playlist when first request has been made, letting the user know it's running
                     for(let i = 1; i <= 10; i++) {
                         setTimeout(function timer() {
-                            $('#loading').append('<ul><li><a href="#">Loading Playlist....</a></li></ul>');                           
+                            $('#loading').append('<ul><li><a href="#">Loading Playlist....</a></li></ul>');
                         }, i * 500);
                     }
                     playlistId = convertedUrl;
                     $('#searchForm').hide();
                     $("#results").html("");
-                    console.log(response.result);
-                    requestPlaylist(playlistId, response.nextPageToken);                
+                    requestPlaylist(playlistId, response.nextPageToken);
                 });
             }
         });
-    }); 
+    });
 
     //taking playlistId and pageToken
     function requestPlaylist(playlistId, pageToken) {
@@ -76,7 +75,7 @@
         request.execute(function(response) {
             nextPageToken = response.nextPageToken;
 
-            
+
             var playlistItems = response.result.items;
 
             if (playlistItems) {
@@ -85,7 +84,7 @@
                     vidTitle.push(item.snippet.title);
                     vidDesc.push(item.snippet.description);
                 });
-            } 
+            }
             else {
                 $('#results').html('Sorry. There is no uploaded videos.');
             }
@@ -105,11 +104,10 @@
                     if(!$('script').attr('src=iframe_api')) {
                         loadScript();
                         $('#next-button').show();
-                        console.log(vidIds)
                         shuffle(vidIds, vidTitle, vidDesc);
                         displayPlaylist(vidTitle)
                         prevNextListener(vidIds);
-                        
+
 
                         return;
                     }
@@ -181,10 +179,10 @@
                         $('#playlist').animate({scrollTop: aTag.position().top + $(window).height},'slow');
                     }
                     scrollToAnchor(aId);
-                }    
+                }
             })(i);
 
-        }  
+        }
     }
 
     //displaying current video title and next video title
@@ -226,6 +224,7 @@
         //hides previous button if you're at the beginning of index
         if(prev === vidIds[0]) {
             $('#prev-button').hide();
+            $('#prev-button').off('keypress', prevNextListener);
         }
     }
 
@@ -233,7 +232,6 @@
     var prevNextListener = function(string) {
         var prev = prevItem(string);
         document.addEventListener("keypress", function onEvent(event) {
-            console.log(event)
             if(event.key === "n") {
                 $(this).off('keypress', prevNextListener);
                 nextSong();
@@ -280,7 +278,7 @@
         $('.show-more').show();
         $('.text-container').after('<hr class="underlineL">');
         player.loadVideoById(vidIds[i]);
-        
+
     }
 
     //handles the video ID and plays it
@@ -291,20 +289,20 @@
 
     //loading youtube when it's ready
     function onYouTubeIframeAPIReady() {
-        $('#loading').remove(); 
+        $('#loading').remove();
         $('#functionality').show();
         //variables for youtube iframe
         player = new YT.Player( 'results', {
             width: '800',
             height: '450',
-            playerVars: { 
+            playerVars: {
                 'autoplay': 0,
                 'controls': 1,
                 'showinfo': 0,
                 'cc_load_policy': 0,
                 'iv_load_policy': 3
             },
-            events: { 
+            events: {
                 'onReady': onPlayerReady,
                 'onStateChange': onChange
             }

@@ -1,7 +1,17 @@
 @import url('https://fonts.googleapis.com/css?family=Mukta');
 
-#howTo, #title, #next, .desc, h1, h2, h3, h4, h5 {
+#howTo, #title, #next, .desc, h1, h2, h3, h4, h5, p {
 	font-family: 'Mukta', sans-serif;
+	/* color: #fff; */
+}
+
+.dark, .light {
+	float: right;
+	margin-right: 10%;
+}
+
+body {
+	/* background: #303030; */
 }
 
 h2 {
@@ -40,7 +50,7 @@ hr {
 .text-control {
 	width: 70%;
 	margin-left:15%;
-	
+
 }
 
 #playlist {
@@ -66,7 +76,7 @@ hr {
 
 div.text-container {
 	margin-left: 15px;
-    width: 80%;    
+    width: 80%;
 }
 
 .show-more {

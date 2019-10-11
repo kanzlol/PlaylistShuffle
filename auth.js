@@ -1,8 +1,8 @@
 
 
-		//authentication 
+		//authentication
 	function onGoogleLoad() {
-	    gapi.client.setApiKey('AIzaSyB3Sim7dGZnujr7gkJ64UR6VZLFeyx1YSg');
+	    gapi.client.setApiKey('AIzaSyDm863fpRs8pymCcK1n1u3qymea59UFld0');
 	    gapi.client.load('youtube', 'v3', function() {
 	        //stuff
 	    });
